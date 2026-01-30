@@ -66,5 +66,5 @@
     "explorer.fileNesting.patterns": {
         "*.sln": "*.csproj"
     },
-    "dotnet.defaultSolution": "GlobalGameJam.sln"
+    "dotnet.defaultSolution": "Paint-the-Bus.sln"
 }
