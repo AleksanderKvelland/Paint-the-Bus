@@ -40,13 +40,13 @@ public class PlayerLook : MonoBehaviour
     void Update()
     {
         //body rotation (yaw)
-        float yaw = lookInput.x * sensitivity * Time.fixedDeltaTime;
+        float yaw = lookInput.x * sensitivity;
         Quaternion delta = Quaternion.Euler(0f, yaw, 0f);
         rigidbody.MoveRotation(rigidbody.rotation * delta);
         
         //camera rotation (pitch)
         lookInput = lookAction.action.ReadValue<Vector2>();
-        pitch -= lookInput.y * sensitivity * Time.deltaTime;
+        pitch -= lookInput.y * sensitivity;
         pitch = Mathf.Clamp(pitch, -verticalClamp, verticalClamp);
         cameraRoot.localRotation = Quaternion.Euler(pitch, 0, 0);
     }
