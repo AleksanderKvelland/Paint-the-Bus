@@ -5,9 +5,39 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Item", menuName = "ScriptableObjects/Items")]
 public class Item : ScriptableObject
 {
+    
     public string itemID;
     public Sprite itemImg;
     public int itemPrice;
+
+    public UpgradeType upgradeType
+    {
+        get { return GetUpgradeTypeFromID(itemID); }
+    }
+
+    private static UpgradeType GetUpgradeTypeFromID(string id)
+    {
+        if (string.IsNullOrEmpty(id))
+            return UpgradeType.None;
+
+        return id switch
+        {
+            "MovementSpeed" => UpgradeType.MovementSpeed,
+            "FireRate" => UpgradeType.FireRate,
+            "TapeGun" => UpgradeType.TapeGun,
+            "TruckMove" => UpgradeType.TruckMove,
+            _ => UpgradeType.None
+        };
+    }
+}
+
+public enum UpgradeType
+{
+    None,
+    MovementSpeed,
+    FireRate,
+    TapeGun,
+    TruckMove
 }
 
 public static class ScriptableObjectExtension

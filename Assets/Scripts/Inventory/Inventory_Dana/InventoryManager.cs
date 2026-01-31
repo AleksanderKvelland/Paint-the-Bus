@@ -73,7 +73,7 @@ public class InventoryManager : MonoBehaviour
         money -= price;
         RefreshMoneyUI();
 
-        ClearItemSlot(activeSlot);
+        // ClearItemSlot(activeSlot);
         ConfigureInventory();
         return true;
     }

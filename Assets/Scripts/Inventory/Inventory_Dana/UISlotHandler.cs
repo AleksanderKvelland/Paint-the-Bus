@@ -11,9 +11,13 @@ public class UISlotHandler : MonoBehaviour, IPointerClickHandler
     public Image slotImg;
     public TextMeshProUGUI itemPrice;
     public InventoryManager inventoryManager;
+    private UpgradeEventsController upgradeEventsController;
 
     void Awake()
     {
+        inventoryManager = FindFirstObjectByType<InventoryManager>();
+        upgradeEventsController = UpgradeEventsController.GetUpgradeEventsController();
+        
         if (item != null)
         {
             item = item.Clone();
@@ -30,12 +34,46 @@ public class UISlotHandler : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         // Left click: try to buy/use the item in this slot.
-        if (eventData.button != PointerEventData.InputButton.Left)
+        if (eventData.button != PointerEventData.InputButton.Left){
+            Debug.Log("Not left click");
+            return;
+        }
+
+        if (item == null){
+            Debug.Log("No item in slot");
+            return;
+        }
+
+        // Try to consume the item
+        if (inventoryManager.TryConsume(this))
+        {
+            // If consumption was successful, trigger the upgrade event
+            TriggerUpgrade();
+        }
+    }
+
+    private void TriggerUpgrade()
+    {
+        if (item == null || upgradeEventsController == null)
             return;
 
-        if (item == null)
-            return;
-
-        inventoryManager.TryConsume(this);
+        switch (item.upgradeType)
+        {
+            case UpgradeType.MovementSpeed:
+                upgradeEventsController.TriggerMoveSpeedUpgrade();
+                break;
+            case UpgradeType.FireRate:
+                upgradeEventsController.TriggerFireRateUpgrade();
+                break;
+            case UpgradeType.TapeGun:
+                upgradeEventsController.TriggerTapeGunUpgrade();
+                break;
+            case UpgradeType.TruckMove:
+                upgradeEventsController.TriggerTruckMoveUpgrade();
+                break;
+            case UpgradeType.None:
+            default:
+                break;
+        }
     }
 }
