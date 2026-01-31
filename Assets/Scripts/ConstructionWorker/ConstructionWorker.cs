@@ -1,13 +1,25 @@
 using UnityEngine;
+using Combat;
 
 public class ConstructionWorker : MonoBehaviour
 {
     private GameObject bus;
     [SerializeField] private float speed = 5f;
 
+    private void Awake()
+    {
+        HealthComponent healthComponent = gameObject.GetComponent<HealthComponent>();
+        healthComponent.OnDeath += HandleDeath;
+    }
+
     public void SetBusTarget(GameObject targetBus)
     {
         bus = targetBus;
+    }
+
+    private void HandleDeath()
+    {
+        Destroy(gameObject);
     }
 
     void Update()

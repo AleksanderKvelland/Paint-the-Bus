@@ -1,10 +1,12 @@
+using Combat;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
     [Header("Bullet Settings")]
-    [SerializeField] private float damage = 10f;
+    [SerializeField] private int damage = 10;
     [SerializeField] private bool useRaycast = false; // Option for more accurate hit detection
+    [SerializeField] private DamageType damageType = DamageType.Pierce;
 
 
     void Start()
@@ -20,6 +22,12 @@ public class Bullet : MonoBehaviour
     {
         // Handle what happens when bullet hits something
         HandleHit(collision.gameObject, collision.GetContact(0).point);
+
+        HealthComponent targetHealth = collision.gameObject.GetComponent<HealthComponent>();
+        if (targetHealth != null)
+        {
+            targetHealth.Damage(damage, damageType);
+        }
     }
 
     void HandleHit(GameObject hitObject, Vector3 hitPoint)

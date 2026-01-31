@@ -791,8 +791,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Gun
   bulletPrefab: {fileID: 3505512436914706583, guid: b7867cd6c0a4a484a974684a419cf752, type: 3}
   firePoint: {fileID: 1650771741}
-  bulletSpeed: 20
-  fireRate: 0.5
+  bulletSpeed: 10
+  fireRate: 0.25
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
