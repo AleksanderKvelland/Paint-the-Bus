@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - ConstructionWorker
+  - Loot
   layers:
   - Default
   - TransparentFX

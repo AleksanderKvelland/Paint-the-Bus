@@ -132,8 +132,11 @@ GameObject:
   - component: {fileID: 475581086}
   - component: {fileID: 475581085}
   - component: {fileID: 475581089}
+  - component: {fileID: 475581090}
+  - component: {fileID: 475581091}
+  - component: {fileID: 475581092}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: ConstructionWorker
   m_TagString: ConstructionWorker
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -185,7 +188,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 48450de50e2d44a03b6bcf5d71e3da95, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -246,6 +249,46 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 100
   attachedDamageModifiers: []
+--- !u!114 &475581090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 475581083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a90fac3e011f42309fbacec83940168, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DropMaskingTapeOnDeath
+  healthComponent: {fileID: 475581089}
+  maskingTapePrefab: {fileID: 3936285049621815481, guid: 8cc36a26f222b4d55af882f493ccf12d, type: 3}
+--- !u!114 &475581091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 475581083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c414bb5d92763145b6b78ea7c3f38e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConstructionWorker
+  speed: 0
+--- !u!114 &475581092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 475581083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9a3f8d5f490436e8de1a2d76109f580, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeathHandler
+  lootPrefab: {fileID: 3936285049621815481, guid: 8cc36a26f222b4d55af882f493ccf12d, type: 3}
 --- !u!1 &526958119 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1139436794606665169, guid: f0aba510bfd5c9240ba08acf3d84f570, type: 3}
@@ -265,10 +308,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Combat.AutoAttacker
   targetTags:
   - ConstructionWorker
-  attackRange: 1.55
+  attackRange: 2.59
   attackRate: 2.04
-  attackDamage: 1
-  attackType: 0
+  attackDamage: 10
+  attackType: 1
 --- !u!1 &619202055
 GameObject:
   m_ObjectHideFlags: 0
@@ -521,8 +564,11 @@ GameObject:
   - component: {fileID: 1505552796}
   - component: {fileID: 1505552795}
   - component: {fileID: 1505552794}
+  - component: {fileID: 1505552799}
+  - component: {fileID: 1505552800}
+  - component: {fileID: 1505552801}
   m_Layer: 0
-  m_Name: Cube_2
+  m_Name: ConstructionWorkerBluntArmor
   m_TagString: ConstructionWorker
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -542,7 +588,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Combat.HealthComponent
   maxHealth: 100
   currentHealth: 100
-  attachedDamageModifiers: []
+  attachedDamageModifiers:
+  - damageType: 1
+    factor: 0.5
 --- !u!65 &1505552795
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -589,7 +637,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 48450de50e2d44a03b6bcf5d71e3da95, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -635,6 +683,46 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1505552799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1505552793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a90fac3e011f42309fbacec83940168, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DropMaskingTapeOnDeath
+  healthComponent: {fileID: 1505552794}
+  maskingTapePrefab: {fileID: 3936285049621815481, guid: 8cc36a26f222b4d55af882f493ccf12d, type: 3}
+--- !u!114 &1505552800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1505552793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c414bb5d92763145b6b78ea7c3f38e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConstructionWorker
+  speed: 0
+--- !u!114 &1505552801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1505552793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9a3f8d5f490436e8de1a2d76109f580, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeathHandler
+  lootPrefab: {fileID: 3936285049621815481, guid: 8cc36a26f222b4d55af882f493ccf12d, type: 3}
 --- !u!1 &1830486795
 GameObject:
   m_ObjectHideFlags: 0
@@ -649,7 +737,7 @@ GameObject:
   - component: {fileID: 1830486797}
   - component: {fileID: 1830486796}
   m_Layer: 0
-  m_Name: Cube_1
+  m_Name: HealthBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -773,6 +861,10 @@ PrefabInstance:
     - target: {fileID: 1139436794606665169, guid: f0aba510bfd5c9240ba08acf3d84f570, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 7560167703051224905, guid: f0aba510bfd5c9240ba08acf3d84f570, type: 3}
+      propertyPath: sensitivity
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 7571235748023247877, guid: f0aba510bfd5c9240ba08acf3d84f570, type: 3}
       propertyPath: m_LocalPosition.x
