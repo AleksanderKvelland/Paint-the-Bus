@@ -83,11 +83,12 @@ public class PlayerMovement : MonoBehaviour
         int player_layer = ~(1 << LayerMask.NameToLayer("Ignore Raycast"));
 
         if (Physics.Raycast(transform.position, Vector3.down, out hit, 20f, player_layer, QueryTriggerInteraction.Ignore))
-        Debug.DrawRay(transform.position, Vector3.down * hit.distance, Color.red);
+        {
             if (hit.transform.name.Contains("Bus") || hit.collider.CompareTag("Bus"))
             {
                 return hit.transform.forward * busSpeed;
             }
+        }
         return Vector3.zero;
     }
 
