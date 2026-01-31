@@ -6,13 +6,19 @@ using UnityEngine.UIElements;
 
 public class TapePoint
 {
-    public TapePoint(Vector3 point, Vector3 normal)
+    public TapePoint(Transform pointTransform, Vector3 normal, GameObject hitObject)
     {
-        this.point = point;
+        this.pointTransform = pointTransform;
         this.normal = normal;
+        this.hitObject = hitObject;
     }
-    public Vector3 point;
+    public Vector3 getPoint()
+    {
+        return pointTransform.position;
+    }
+    public Transform pointTransform;
     public Vector3 normal;
+    public GameObject hitObject;
 }
 
 public class TapeSystem : MonoBehaviour
@@ -24,11 +30,11 @@ public class TapeSystem : MonoBehaviour
     public GameObject tapePartPrefab;
 
     private InputAction tapeAction;
-    private bool isTaping = false;
     private TapePoint prevTapePoint = null;
     private int tapeable_layer = 0;
     private List<GameObject> tapeParts = new List<GameObject>();
     private float edgeScanRotateAngle = 5.0f;
+    GameObject tapeStartPoint = null;
 
     void Awake()
     {
@@ -36,9 +42,9 @@ public class TapeSystem : MonoBehaviour
         tapeable_layer = 1 << LayerMask.NameToLayer("Tapeable");
     }
 
-    void createTapePart(Vector3 from, TapePoint to)
+    GameObject createTapePart(TapePoint from, Vector3 toPoint, Vector3 toNormal)
     {
-        float tapeLength = (to.point - from).magnitude;
+        float tapeLength = (toPoint - from.getPoint()).magnitude;
         GameObject tapePart = Instantiate(tapePartPrefab);
         Transform tapeChildTransform = tapePart.transform.GetChild(0);
         tapeChildTransform.localScale = new Vector3(tapeChildTransform.localScale.x,
@@ -46,10 +52,12 @@ public class TapeSystem : MonoBehaviour
                                                     tapeLength * .5f);
         tapeChildTransform.localPosition = new Vector3(.0f, .0f, tapeChildTransform.localScale.z * 1.0f);
 
-        tapePart.transform.position = prevTapePoint.point;
-        tapePart.transform.LookAt(to.point, to.normal);
+        tapePart.transform.position = prevTapePoint.getPoint();
+        tapePart.transform.LookAt(toPoint, toNormal);
+        tapePart.transform.SetParent(from.hitObject.transform, true);
         
         tapeParts.Add(tapePart);
+        return tapePart;
     }
 
     void Update()
@@ -61,10 +69,12 @@ public class TapeSystem : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, tapeRange))
             {
-                TapePoint newTapePoint = new TapePoint(hit.point + hit.normal * tapeDistanceFromHit, hit.normal);
+                Vector3 newTapePoint = hit.point + hit.normal * tapeDistanceFromHit;
+                Vector3 newTapePointNormal = hit.normal;
+
                 if (prevTapePoint != null)
                 {
-                    Vector3 tapeDir = newTapePoint.point - prevTapePoint.point;
+                    Vector3 tapeDir = newTapePoint - prevTapePoint.getPoint();
                     float distanceFromLast = tapeDir.magnitude;
                     tapeDir.Normalize();
 
@@ -81,7 +91,7 @@ public class TapeSystem : MonoBehaviour
                         Quaternion edgeScanRot = Quaternion.AngleAxis(edgeScanRotateAngle, rotateAxis1);
                         // Keep rotating the scanDir1 out from the edge until the ray in this direction doesn't hit anything anymore.
                         // Stop if we exceed 90 degrees angle.
-                        while (rotateAngle <= 90.0f && Physics.Raycast(prevTapePoint.point, scanDir1, distanceFromLast))
+                        while (rotateAngle <= 90.0f && Physics.Raycast(prevTapePoint.getPoint(), scanDir1, distanceFromLast))
                         {
                             scanDir1 = (edgeScanRot * scanDir1).normalized;
                             rotateAngle += edgeScanRotateAngle;
@@ -100,7 +110,7 @@ public class TapeSystem : MonoBehaviour
                             // This quaternion will rotate the scanDir2 away/out from the edge by edgeScanRotateAngle degrees.
                             // Stop if we exceed 90 degrees angle.
                             edgeScanRot = Quaternion.AngleAxis(edgeScanRotateAngle, rotateAxis2);
-                            while (rotateAngle <= 90.0f && Physics.Raycast(newTapePoint.point, scanDir2, distanceFromLast))
+                            while (rotateAngle <= 90.0f && Physics.Raycast(newTapePoint, scanDir2, distanceFromLast))
                             {
                                 scanDir2 = (edgeScanRot * scanDir2).normalized;
                                 rotateAngle += edgeScanRotateAngle;
@@ -112,36 +122,54 @@ public class TapeSystem : MonoBehaviour
                                 // Find the intersection between the 2 opposing edge scan direction (scanDir1/scanDir2).
                                 // However, because intersecting two Vector3's is not a thing we convert one of the dirs to a plane,
                                 // and we get the intersection between this plane and the other dir.
-                                Plane plane = new Plane(Vector3.Cross(rotateAxis1, scanDir1), prevTapePoint.point);
-                                Ray ray = new Ray(newTapePoint.point, scanDir2);
+                                Plane plane = new Plane(Vector3.Cross(rotateAxis1, scanDir1), prevTapePoint.getPoint());
+                                Ray ray = new Ray(newTapePoint, scanDir2);
                                 float intersectDist;
                                 createEdgePoint = plane.Raycast(ray, out intersectDist);
                                 if (createEdgePoint)
-                                {    
-                                    TapePoint edgeTapePoint = new TapePoint(newTapePoint.point + scanDir2 * intersectDist, prevTapePoint.normal);
+                                {
                                     // Create the edge tape part.
-                                    createTapePart(prevTapePoint.point, edgeTapePoint);
-                                    prevTapePoint = edgeTapePoint;
+                                    GameObject edgePart = createTapePart(prevTapePoint,
+                                                                     newTapePoint + scanDir2 * intersectDist,
+                                                                     prevTapePoint.normal);
+                                    // Get the transform of the child object named "to" of the tape part prefab.
+                                    // (It's the second child)
+                                    Transform edgeToTransform = edgePart.transform.GetChild(0).GetChild(1);
+                                    prevTapePoint = new TapePoint(edgeToTransform,
+                                                                  prevTapePoint.normal,
+                                                                  hit.collider.gameObject);
                                 }
                             }
                         }
 
-                        createTapePart(prevTapePoint.point, newTapePoint);
-                        prevTapePoint = newTapePoint;
+                        GameObject part = createTapePart(prevTapePoint, newTapePoint, newTapePointNormal);
+                        // Get the transform of the child object named "to" of the tape part prefab.
+                        // (It's the second child)
+                        Transform toTransform = part.transform.GetChild(0).GetChild(1);
+                        prevTapePoint = new TapePoint(toTransform,
+                                                      newTapePointNormal,
+                                                      hit.collider.gameObject);
                     }
                 }
                 else
                 {
-                    prevTapePoint = newTapePoint;
+                    tapeStartPoint = new GameObject();
+                    tapeStartPoint.transform.position = newTapePoint;
+                    tapeStartPoint.transform.SetParent(hit.collider.transform);
+                    prevTapePoint = new TapePoint(tapeStartPoint.transform,
+                                                  newTapePointNormal,
+                                                  hit.collider.gameObject);
                 }
             }
             else
             {
+                Destroy(tapeStartPoint);
                 prevTapePoint = null;
-            }
+            } 
         }
         else
         {
+            Destroy(tapeStartPoint);
             prevTapePoint = null;
         }
     }
