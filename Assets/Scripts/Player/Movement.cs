@@ -24,11 +24,14 @@ public class PlayerMovement : MonoBehaviour
     private float jumpCooldownTimer;
     private bool jumpOnCooldown;
     private bool groundSnapEnabled = true;
+    private UpgradeEventsController upgradeEventsController;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         rb.useGravity = true;
+        upgradeEventsController = UpgradeEventsController.GetUpgradeEventsController();
+        upgradeEventsController.onMoveSpeedUpgrade += UpgradeMoveSpeed;
     }
 
     private void Start()
@@ -125,5 +128,10 @@ public class PlayerMovement : MonoBehaviour
             jumpOnCooldown = false;
             jumpCooldownTimer = 0f;
         }
+    }
+
+    public void UpgradeMoveSpeed()
+    {
+        moveSpeed += 2f;
     }
 }
