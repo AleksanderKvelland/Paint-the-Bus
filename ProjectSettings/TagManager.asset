@@ -7,6 +7,8 @@ TagManager:
   - ConstructionWorker
   - Loot
   - PickupInventory
+  - Tapeable
+  - Bus
   layers:
   - Default
   - TransparentFX
