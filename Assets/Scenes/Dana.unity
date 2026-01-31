@@ -1701,8 +1701,8 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!1001 &5971886695697276188
-PrefabInstance:
+--- !u!1 &2031091588
+GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1979,5 +1979,5 @@ SceneRoots:
   - {fileID: 1997472539}
   - {fileID: 139448434}
   - {fileID: 1312278670}
-  - {fileID: 5971886695697276188}
+  - {fileID: 2116765042}
   - {fileID: 1745736507}
