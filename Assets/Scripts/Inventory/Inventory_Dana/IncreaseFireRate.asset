@@ -12,7 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b1ad444e11e0b340b2a2b2c47736546, type: 3}
   m_Name: IncreaseFireRate
   m_EditorClassIdentifier: Assembly-CSharp::Item
+<<<<<<< HEAD:Assets/Scripts/Inventory/Inventory_Dana/IncreaseFireRate.asset
   itemID: IncreaseFireRate
   itemImg: {fileID: 0}
+=======
+  itemID: WeaponUpgrade
+  itemImg: {fileID: 21300000, guid: b65b9347311f72141bd63e18ce43c14d, type: 3}
+>>>>>>> inventory-ui:Assets/Scripts/Inventory/Inventory_Dana/upgrade4.asset
   itemPrice: 50
   upgradeType: 0

@@ -12,7 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b1ad444e11e0b340b2a2b2c47736546, type: 3}
   m_Name: MovementSpeed
   m_EditorClassIdentifier: Assembly-CSharp::item
+<<<<<<< HEAD:Assets/Scripts/Inventory/Inventory_Dana/MovementSpeed.asset
   itemID: MovementSpeed
   itemImg: {fileID: 0}
   itemPrice: 50
   upgradeType: 0
+=======
+  itemID: Fuel
+  itemImg: {fileID: 21300000, guid: 3b2aab26547717d47b5749180bf2ca83, type: 3}
+  itemPrice: 15
+>>>>>>> inventory-ui:Assets/Scripts/Inventory/Inventory_Dana/upgrade2.asset
