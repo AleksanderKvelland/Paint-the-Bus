@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ConstructionWorker
   - Loot
+  - Tapeable
   layers:
   - Default
   - TransparentFX
