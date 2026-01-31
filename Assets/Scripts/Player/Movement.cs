@@ -133,5 +133,6 @@ public class PlayerMovement : MonoBehaviour
     public void UpgradeMoveSpeed()
     {
         moveSpeed += 2f;
+        Debug.Log("Player move speed upgraded to: " + moveSpeed);
     }
 }

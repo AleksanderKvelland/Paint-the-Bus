@@ -59,6 +59,9 @@ public class InventoryUI : MonoBehaviour
 
     public void RefreshAll()
     {
+        if (slotUIs == null || slotUIs.Length == 0)
+            return;
+            
         for (int i = 0; i < slotUIs.Length; i++)
         {
             slotUIs[i].Refresh(inventory.GetSlot(i),

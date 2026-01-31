@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ConstructionWorker
   - Loot
+  - PickupInventory
   layers:
   - Default
   - TransparentFX

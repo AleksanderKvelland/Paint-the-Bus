@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 public class UpgradeEventsController
 {
@@ -20,5 +21,20 @@ public class UpgradeEventsController
     public void TriggerMoveSpeedUpgrade()
     {
         onMoveSpeedUpgrade?.Invoke();
+    }
+
+    public void TriggerTruckMoveUpgrade()
+    {
+        onTruckMoveUpgrade?.Invoke();
+    }
+
+    public void TriggerFireRateUpgrade()
+    {
+        onFireRateUpgrade?.Invoke();
+    }
+
+    public void TriggerTapeGunUpgrade()
+    {
+        onTapeGunUpgrade?.Invoke();
     }
 }
