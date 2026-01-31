@@ -1,3 +1,5 @@
+using System;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -64,12 +66,30 @@ public class PlayerMovement : MonoBehaviour
 
         velocity.x = newHorizontal.x;
         velocity.z = newHorizontal.z;
-        rb.linearVelocity = velocity;
+        rb.linearVelocity = velocity + BusMomentum();
     }
 
     public void OnMove(InputValue value)
     {
         input = value.Get<Vector2>();
+    }
+
+    private Vector3 BusMomentum()
+    {
+        RaycastHit hit;
+        float busSpeed = 2f;
+
+        // Ignore "Ignore Raycast" (player) layer
+        int player_layer = ~(1 << LayerMask.NameToLayer("Ignore Raycast"));
+
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 20f, player_layer, QueryTriggerInteraction.Ignore))
+        {
+            if (hit.transform.name.Contains("Bus") || hit.collider.CompareTag("Bus"))
+            {
+                return hit.transform.forward * busSpeed;
+            }
+        }
+        return Vector3.zero;
     }
 
     public void OnJump()
@@ -113,7 +133,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private bool IsGrounded()
-    {
+    {   
         Vector3 origin = groundCheck ? groundCheck.position : transform.position;
         return Physics.Raycast(origin, Vector3.down, groundCheckDistance, groundMask, QueryTriggerInteraction.Ignore);
     }

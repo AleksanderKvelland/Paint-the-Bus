@@ -8,32 +8,51 @@ public class Gun : MonoBehaviour
     [SerializeField] private Transform firePoint;
     [SerializeField] private float bulletSpeed = 20f;
     [SerializeField] private float fireRate = 0.5f;
-    private InputAction fireAction;
     private UpgradeEventsController upgradeEventsController = UpgradeEventsController.GetUpgradeEventsController();
+    private EquipmentController equipmentController;
     
     private float nextFireTime = 0f;
+    private bool hasShot = false;
 
     void Start()
     {
-        // Initialize input action for firing
-        fireAction = InputSystem.actions.FindAction("Attack");
+        equipmentController = EquipmentController.GetEquipmentController();
         upgradeEventsController.onFireRateUpgrade += HandleFireRateUpgrade;
+        equipmentController.onUse += Shoot;
+    }
 
+    void OnDestroy()
+    {
+        if (equipmentController != null)
+        {
+            equipmentController.onUse -= Shoot;
+        }
+        if (upgradeEventsController != null)
+        {
+            upgradeEventsController.onFireRateUpgrade -= HandleFireRateUpgrade;
+        }
     }
 
     void Update()
     {
-        // Check for shoot input (left mouse button or custom key)
-        if (fireAction.WasPressedThisFrame() && Time.time >= nextFireTime)
+        if (hasShot)
         {
-            Shoot();
-            nextFireTime = Time.time + fireRate;
+            if (Time.time >= nextFireTime)
+            {
+                hasShot = false;
+            }
         }
     }
 
-    void Shoot()
+    void Shoot(GameObject gameObject)
     {
-        upgradeEventsController.TriggerMoveSpeedUpgrade();
+        if (gameObject != this.gameObject)
+            return;
+        Debug.Log("Shooting");
+        if (hasShot || Time.time < nextFireTime)
+            return;
+        hasShot = true;
+        nextFireTime = Time.time + fireRate;
         // Instantiate the bullet at the fire point
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         
