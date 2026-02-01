@@ -106,6 +106,7 @@ GameObject:
   - component: {fileID: 8861937888077706661}
   - component: {fileID: 980568265328903961}
   - component: {fileID: 1681600809652155392}
+  - component: {fileID: 4198126630098016521}
   m_Layer: 2
   m_Name: Player
   m_TagString: Untagged
@@ -359,6 +360,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EquipmentController
   handSocket: {fileID: 7954253418651921130}
+--- !u!114 &4198126630098016521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1139436794606665169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b47a1f5c9e12f274c9d76006351b1a1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TapeSystem
+  playerCamera: {fileID: 5686295767301116999}
+  tapePartLength: 0.5
+  tapeRange: 6
+  tapeDistanceFromHit: 0.05
+  tapePartPrefab: {fileID: 2660054728788355517, guid: 471b897049cb1744eacbab4a04f65fd4, type: 3}
 --- !u!1 &1159096532428065929
 GameObject:
   m_ObjectHideFlags: 0

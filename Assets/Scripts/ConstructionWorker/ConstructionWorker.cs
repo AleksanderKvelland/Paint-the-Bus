@@ -58,7 +58,7 @@ public class ConstructionWorker : MonoBehaviour
         Vector3 toBus = bus.transform.position - transform.position;
 
         // Move towards bus
-        if (toBus.magnitude < attackRange * .5f)
+        if (true)//toBus.magnitude < attackRange * .5f)
         {
             Vector3 movement = toBus.normalized * speed * Time.deltaTime;
             controller.Move(movement);

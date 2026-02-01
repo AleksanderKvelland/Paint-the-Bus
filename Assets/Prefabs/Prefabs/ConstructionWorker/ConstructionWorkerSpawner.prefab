@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 779affb88a850c049bb816e26ee2d00a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  constructionWorkerPrefab: {fileID: 1649941727961977124, guid: 39e449c874b2a9f419ee2f8949629684, type: 3}
+  constructionWorkerPrefab: {fileID: 875391033574983932, guid: 1327e3765f976024d86618521bf1f49d, type: 3}
   bus: {fileID: 0}
   spawnRadius: 50
   initialSpawnInterval: 3
