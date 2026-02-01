@@ -79,7 +79,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Add bus momentum
-        Vector3 busMomentum = BusMomentum();
+        Vector3 busMomentum = ApplyVehicleMomentum();
         controller.Move((velocity + busMomentum) * Time.deltaTime);
     }
 
@@ -88,7 +88,7 @@ public class PlayerMovement : MonoBehaviour
         input = value.Get<Vector2>();
     }
 
-    private Vector3 BusMomentum()
+    private Vector3 ApplyVehicleMomentum()
     {
         RaycastHit hit;
 
@@ -97,20 +97,14 @@ public class PlayerMovement : MonoBehaviour
 
         if (Physics.Raycast(transform.position, Vector3.down, out hit, 20f, player_layer, QueryTriggerInteraction.Ignore))
         {
-            if (hit.transform.name.Contains("Bus") || hit.collider.CompareTag("Bus"))
+            // TODO: Refactor to use tags or layers instead of name checks
+            if (hit.transform.name.Contains("Bus") || hit.transform.name.Contains("Pickup"))
             {
-                // Try to get SplineAnimate from the hit object first
                 SplineAnimate splineAnimate = hit.transform.GetComponent<SplineAnimate>();
-                
-                // If not found, check the parent
-                if (splineAnimate == null && hit.transform.parent != null)
+                if (splineAnimate != null)
                 {
-                    splineAnimate = hit.transform.parent.GetComponent<SplineAnimate>();
+                    return hit.transform.forward * splineAnimate.MaxSpeed;
                 }
-                
-                float busSpeed = splineAnimate != null ? splineAnimate.MaxSpeed : 0f;
-                
-                return hit.transform.forward * busSpeed;
             }
         }
         return Vector3.zero;
