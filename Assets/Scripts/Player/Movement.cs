@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Splines;
 
-[RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
@@ -12,28 +12,27 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float airControl = 0.3f;
 
     [Header("Jumping")]
-    [SerializeField] private float jumpForce = 15f;
+    [SerializeField] private float jumpForce = 7f;
     [SerializeField] private float jumpCooldown = 0.6f;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundCheckDistance = 1.9f;
     [SerializeField] private LayerMask groundMask = ~0;
-    [SerializeField] private float gravity = 9.81f;
 
     [Header("Dash")]
     [SerializeField] private float dashSpeed = 10f;
     [SerializeField] private GameObject camera;
 
-    private CharacterController controller;
+    private Rigidbody rb;
     private Vector2 input;
     private float jumpCooldownTimer;
     private bool jumpOnCooldown;
     private bool groundSnapEnabled = true;
     private UpgradeEventsController upgradeEventsController;
-    private Vector3 velocity = Vector3.zero;
 
     private void Awake()
     {
-        controller = GetComponent<CharacterController>();
+        rb = GetComponent<Rigidbody>();
+        rb.useGravity = true;
         upgradeEventsController = UpgradeEventsController.GetUpgradeEventsController();
         upgradeEventsController.onMoveSpeedUpgrade += UpgradeMoveSpeed;
     }
@@ -59,28 +58,16 @@ public class PlayerMovement : MonoBehaviour
         move = Vector3.ClampMagnitude(move, 1f);
         Vector3 desiredHorizontal = move * moveSpeed;
 
+        Vector3 velocity = rb.linearVelocity;
         Vector3 currentHorizontal = new Vector3(velocity.x, 0f, velocity.z);
 
-        bool grounded = controller.isGrounded;
+        bool grounded = IsGrounded();
         float control = grounded ? 1f : airControl;
         Vector3 newHorizontal = Vector3.Lerp(currentHorizontal, desiredHorizontal, control);
 
         velocity.x = newHorizontal.x;
         velocity.z = newHorizontal.z;
-        
-        // Apply gravity
-        if (grounded && velocity.y < 0)
-        {
-            velocity.y = 0f;
-        }
-        else
-        {
-            velocity.y -= gravity * Time.deltaTime;
-        }
-
-        // Add bus momentum
-        Vector3 busMomentum = ApplyVehicleMomentum();
-        controller.Move((velocity + busMomentum) * Time.deltaTime);
+        rb.linearVelocity = velocity + ApplyVehicleMomentum();
     }
 
     public void OnMove(InputValue value)
@@ -112,14 +99,31 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnJump()
     {
-        if (controller.isGrounded && !jumpOnCooldown)
+        if (IsGrounded() && !jumpOnCooldown)
         {
-            velocity.y = jumpForce;
+            Vector3 v = rb.linearVelocity;
+            if (v.y > 0f) v.y = 0f;
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
             jumpOnCooldown = true;
-            jumpCooldownTimer = 0f; // Reset timer when jump starts
+            jumpCooldownTimer = 0f;
         }
     }
 
+    public void OnDash()
+    {
+        Vector3 dashDirection = transform.forward;
+        if (camera)
+        {
+            dashDirection = camera.transform.forward;
+        }
+
+        dashDirection.y = 0f;
+        dashDirection.Normalize();
+
+        Vector3 velocity = rb.linearVelocity;
+        velocity = dashDirection * dashSpeed + Vector3.up * velocity.y;
+        rb.linearVelocity = velocity;
+    }
 
     public void DisableGroundSnap(float duration = 0.2f)
     {
@@ -131,6 +135,12 @@ public class PlayerMovement : MonoBehaviour
     private void EnableGroundSnap()
     {
         groundSnapEnabled = true;
+    }
+
+    private bool IsGrounded()
+    {   
+        Vector3 origin = groundCheck ? groundCheck.position : transform.position;
+        return Physics.Raycast(origin, Vector3.down, groundCheckDistance, groundMask, QueryTriggerInteraction.Ignore);
     }
 
     private void HandleJumpCooldown()

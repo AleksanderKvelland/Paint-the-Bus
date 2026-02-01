@@ -10,10 +10,6 @@ public class ConstructionWorker : MonoBehaviour
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
-        if (controller == null)
-        {
-            Debug.LogError("ConstructionWorker requires a CharacterController component!");
-        }
 
         HealthComponent healthComponent = gameObject.GetComponent<HealthComponent>();
         if (healthComponent != null)
@@ -25,7 +21,6 @@ public class ConstructionWorker : MonoBehaviour
     public void SetBusTarget(GameObject targetBus)
     {
         bus = targetBus;
-        Debug.Log($"Construction worker set bus target: {targetBus.name}");
     }
 
     private void HandleDeath()
@@ -36,16 +31,10 @@ public class ConstructionWorker : MonoBehaviour
     void Update()
     {
         if (bus == null)
-        {
-            Debug.LogWarning("Bus target is null!");
             return;
-        }
 
         if (controller == null)
-        {
-            Debug.LogError("CharacterController is null!");
             return;
-        }
 
         // Calculate direction to bus
         Vector3 direction = (bus.transform.position - transform.position).normalized;
@@ -53,7 +42,5 @@ public class ConstructionWorker : MonoBehaviour
         // Move towards bus
         Vector3 movement = direction * speed * Time.deltaTime;
         controller.Move(movement);
-        
-        Debug.Log($"Moving towards bus. Current pos: {transform.position}, Bus pos: {bus.transform.position}");
     }
 }
