@@ -19,19 +19,14 @@ public class ConstructionWorker : MonoBehaviour
     private float attackRange = 5f;
     private int bus_layer;
     private int tape_layer;
-    private NavMeshAgent agent;
+    private CharacterController controller;
     private float attackCooldownRemaining = 0f;
-    private float lastBusHitDistance = 0f;
     private HealthComponent busHealth;
 
     private void Awake()
     {
-        agent = GetComponent<NavMeshAgent>();
-        if (!agent.isOnNavMesh)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        controller = GetComponent<CharacterController>();
+
         HealthComponent healthComponent = gameObject.GetComponent<HealthComponent>();
         healthComponent.OnDeath += HandleDeath;
         bus_layer = 1 << LayerMask.NameToLayer("Bus");
@@ -51,7 +46,7 @@ public class ConstructionWorker : MonoBehaviour
 
     void Update()
     {
-        if (bus == null)
+        if (bus == null || controller == null)
             return;
 
         if (attackCooldownRemaining > 0f)
@@ -59,8 +54,15 @@ public class ConstructionWorker : MonoBehaviour
             attackCooldownRemaining -= Time.deltaTime;
         }
 
-        Vector3 busToTagger = transform.position - bus.transform.position;
-        agent.SetDestination(bus.transform.position + busToTagger.normalized * lastBusHitDistance);
+         // Calculate direction to bus
+        Vector3 toBus = bus.transform.position - transform.position;
+
+        // Move towards bus
+        if (toBus.magnitude < attackRange * .5f)
+        {
+            Vector3 movement = toBus.normalized * speed * Time.deltaTime;
+            controller.Move(movement);
+        }
 
         if (attackCooldownRemaining <= 0f)
         {
@@ -71,7 +73,6 @@ public class ConstructionWorker : MonoBehaviour
                 {
                     attackCooldownRemaining = attackCooldown;
 
-                    lastBusHitDistance = Vector3.Distance(hit.point, transform.position);
                     Instantiate(paintDecal, bus.transform);
                     paintDecal.transform.position = bus.transform.InverseTransformPoint(hit.point);
 
