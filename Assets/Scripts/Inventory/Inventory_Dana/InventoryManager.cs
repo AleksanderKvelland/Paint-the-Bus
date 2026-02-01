@@ -12,6 +12,7 @@ public class InventoryManager : MonoBehaviour
     public int money;
 
     public TextMeshProUGUI priceText;
+    [SerializeField] private TextMeshProUGUI coinsDisplay;
 
     private void Awake()
     {
@@ -23,6 +24,9 @@ public class InventoryManager : MonoBehaviour
     {
         if (priceText != null)
             priceText.text = money.ToString();
+        
+        if (coinsDisplay != null)
+            coinsDisplay.text = $"Coins: {money}";
     }
 
     public UISlotHandler FindSlotWithItem(string itemID)

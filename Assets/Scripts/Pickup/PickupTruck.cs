@@ -10,14 +10,37 @@ public class PickupTruck : MonoBehaviour, IInteractable
     private InputAction exitAction;
     private PlayerMovement playerMovement;
     private PlayerLook playerLook;
-    
+    private bool playerInsidePickup = false;
+
+    public void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            playerInsidePickup = true;
+            Debug.Log("Player entered the truck pickup area.");
+        }
+    }
+
+    public void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            playerInsidePickup = false;
+            Debug.Log("Player exited the truck pickup area.");
+        }
+    }
+
     public bool CanInteract()
     {
-        return true;
+        return playerInsidePickup;
     }
 
     public void Interact(Interactor interactor)
     {
+        Debug.Log("Attempting to interact with the truck pickup.");
+        if (!playerInsidePickup)
+            return;
+        Debug.Log("Interacted with the truck pickup.");
         pickupInventory.SetActive(true);
         
         // Disable player movement
