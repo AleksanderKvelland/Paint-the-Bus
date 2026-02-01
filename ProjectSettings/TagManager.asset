@@ -13,10 +13,10 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Bus
   - Water
   - UI
-  - 
+  - Tape
   - 
   - 
   - 
@@ -55,3 +55,4 @@ TagManager:
   - Light Layer 5
   - Light Layer 6
   - Light Layer 7
+  - No decals

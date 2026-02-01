@@ -48,13 +48,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8325689553952117475, guid: 85f7367dec9213940b3336d565269843, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -8068073526183931155, guid: 85f7367dec9213940b3336d565269843, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: -1950733119399844177, guid: 85f7367dec9213940b3336d565269843, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.69
       objectReference: {fileID: 0}
+    - target: {fileID: 901897122485332503, guid: 85f7367dec9213940b3336d565269843, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 85f7367dec9213940b3336d565269843, type: 3}
       propertyPath: m_Name
       value: Bus
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 85f7367dec9213940b3336d565269843, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 85f7367dec9213940b3336d565269843, type: 3}
       propertyPath: m_TagString
@@ -68,6 +84,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5823506122465456227, guid: 85f7367dec9213940b3336d565269843, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -78,6 +98,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 85f7367dec9213940b3336d565269843, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5573588612441893398}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 85f7367dec9213940b3336d565269843, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3407502553572126283}
     - targetCorrespondingSourceObject: {fileID: 5823506122465456227, guid: 85f7367dec9213940b3336d565269843, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5504324493262598873}
@@ -172,6 +195,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &3407502553572126283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4852188375240728613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e73f88bee043c4edf9098e3e973afeb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Combat.HealthComponent
+  maxHealth: 100
+  currentHealth: 100
+  attachedDamageModifiers: []
 --- !u!1 &6890357418339798937 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -8068073526183931155, guid: 85f7367dec9213940b3336d565269843, type: 3}
@@ -191,4 +229,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DoorInteraction
   _rotationSpeed: 2
   _leftDoor: {fileID: 3132988973909605339}
-  _rightDoor: {fileID: 3132988973909605339}
