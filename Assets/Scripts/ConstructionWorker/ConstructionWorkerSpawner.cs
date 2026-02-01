@@ -9,6 +9,8 @@ public class ConstructionWorkerSpawner : MonoBehaviour
     [SerializeField] private float initialSpawnInterval = 5f;
     [SerializeField] private float minSpawnInterval = 1f;
     [SerializeField] private float spawnRateIncreasePerSecond = 0.1f;
+    [SerializeField] private RectTransform healthBar;
+    [SerializeField] private GameObject finishScreen;
 
     private float currentSpawnInterval;
     private float timeSinceLastSpawn = 0f;
@@ -56,7 +58,7 @@ public class ConstructionWorkerSpawner : MonoBehaviour
         ConstructionWorker workerScript = worker.GetComponentInChildren<ConstructionWorker>();
         if (workerScript != null)
         {
-            workerScript.SetBusTarget(bus);
+            workerScript.SetBusTarget(bus, healthBar, finishScreen);
         }
     }
 

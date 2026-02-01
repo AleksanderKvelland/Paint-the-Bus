@@ -12,6 +12,8 @@ public class ConstructionWorker : MonoBehaviour
     public float paintSprayRadius = 1.5f;
     public float tapeDamageReduction = 1f;
     public float paintBaseDamage = 10f;
+    private RectTransform healthBar;
+    private GameObject finishScreen;
 
     private GameObject bus;
     [SerializeField] private float speed = 5f;
@@ -33,10 +35,12 @@ public class ConstructionWorker : MonoBehaviour
         tape_layer = 1 << LayerMask.NameToLayer("Tape");
     }
 
-    public void SetBusTarget(GameObject targetBus)
+    public void SetBusTarget(GameObject targetBus, RectTransform healthBar, GameObject finishScreen)
     {
         bus = targetBus;
         busHealth = bus.GetComponent<HealthComponent>();
+        this.healthBar = healthBar;
+        this.finishScreen = finishScreen;
     }
 
     private void HandleDeath()
@@ -87,6 +91,12 @@ public class ConstructionWorker : MonoBehaviour
                         int dmg = (int)Math.Ceiling(paintBaseDamage - paintBaseDamage * dmgReductionPercentage);
                         //Debug.Log(dmg);
                         busHealth.Damage(dmg);
+                        float percentageHealth = ((float)busHealth.GetHealth) / ((float)busHealth.GetMaxHealth);
+                        healthBar.localScale = new Vector3(percentageHealth, 1f, 1f);
+                        if (busHealth.GetHealth <= 0)
+                        {
+                            finishScreen.SetActive(true);
+                        }
                     }
                 }
             }

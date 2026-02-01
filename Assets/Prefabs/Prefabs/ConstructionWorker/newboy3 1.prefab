@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e73f88bee043c4edf9098e3e973afeb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Combat.HealthComponent
-  maxHealth: 100
+  maxHealth: 10
   currentHealth: 100
   attachedDamageModifiers: []
 --- !u!114 &5165218654819586821

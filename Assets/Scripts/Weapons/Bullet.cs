@@ -4,7 +4,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     [Header("Bullet Settings")]
-    [SerializeField] private int damage = 10;
+    [SerializeField] private int damage = 100;
     [SerializeField] private bool useRaycast = false; // Option for more accurate hit detection
     [SerializeField] private DamageType damageType = DamageType.Pierce;
 
