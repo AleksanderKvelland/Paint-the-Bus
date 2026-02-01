@@ -49,10 +49,12 @@ public class TapeSystem : MonoBehaviour
     private List<GameObject> tapeParts = new List<GameObject>();
     private float edgeScanRotateAngle = 5.0f;
     GameObject tapeStartPoint = null;
+    private int tapeMask;
 
     void Awake()
     {
         tapeAction = InputSystem.actions.FindAction("Tape");
+        tapeMask = ~(1 << LayerMask.NameToLayer("Tape"));
     }
 
     GameObject createTapePart(TapePoint from, Vector3 toPoint, Vector3 toNormal)
@@ -91,7 +93,7 @@ public class TapeSystem : MonoBehaviour
         if (tapeAction.IsPressed())
         {            
             RaycastHit hit;
-            if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, tapeRange))
+            if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, tapeRange, tapeMask))
             {
                 Vector3 newTapePoint = hit.point + hit.normal * tapeDistanceFromHit;
                 Vector3 newTapePointNormal = hit.normal;
@@ -121,7 +123,7 @@ public class TapeSystem : MonoBehaviour
                         Quaternion edgeScanRot = Quaternion.AngleAxis(edgeScanRotateAngle, rotateAxis1);
                         // Keep rotating the scanDir1 out from the edge until the ray in this direction doesn't hit anything anymore.
                         // Stop if we exceed 90 degrees angle.
-                        while (rotateAngle <= 90.0f && Physics.Raycast(prevTapePoint.getPoint(), scanDir1, distanceFromLast))
+                        while (rotateAngle <= 90.0f && Physics.Raycast(prevTapePoint.getPoint(), scanDir1, distanceFromLast, tapeMask))
                         {
                             scanDir1 = (edgeScanRot * scanDir1).normalized;
                             rotateAngle += edgeScanRotateAngle;
@@ -140,7 +142,7 @@ public class TapeSystem : MonoBehaviour
                             // This quaternion will rotate the scanDir2 away/out from the edge by edgeScanRotateAngle degrees.
                             // Stop if we exceed 90 degrees angle.
                             edgeScanRot = Quaternion.AngleAxis(edgeScanRotateAngle, rotateAxis2);
-                            while (rotateAngle <= 90.0f && Physics.Raycast(newTapePoint, scanDir2, distanceFromLast))
+                            while (rotateAngle <= 90.0f && Physics.Raycast(newTapePoint, scanDir2, distanceFromLast, tapeMask))
                             {
                                 scanDir2 = (edgeScanRot * scanDir2).normalized;
                                 rotateAngle += edgeScanRotateAngle;
