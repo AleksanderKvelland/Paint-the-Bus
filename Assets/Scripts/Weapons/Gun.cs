@@ -7,7 +7,7 @@ public class Gun : MonoBehaviour
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform firePoint;
     [SerializeField] private float bulletSpeed = 20f;
-    [SerializeField] private float fireRate = 0.5f;
+    [SerializeField] private float fireRate = 1f;
     private UpgradeEventsController upgradeEventsController = UpgradeEventsController.GetUpgradeEventsController();
     private EquipmentController equipmentController;
     
@@ -66,7 +66,7 @@ public class Gun : MonoBehaviour
 
     void HandleFireRateUpgrade()
     {
-        fireRate = Mathf.Max(0.1f, fireRate - 0.1f); // Decrease fire rate, minimum of 0.1 seconds
+        fireRate = Mathf.Max(0.1f, fireRate - 0.3f); // Decrease fire rate, minimum of 0.1 seconds
     }
 
 
