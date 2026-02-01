@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -24,32 +26,52 @@ public class Interactor : MonoBehaviour
     {
         if (_interactAction.WasPressedThisFrame())
         {
-            if (DoInteractionTest(out IInteractable interactable))
-            {
-                if (interactable.CanInteract())
-                {
-                    interactable.Interact(this);
-                }
-            }
+            PerformInteraction();
         }
     }
 
-    private bool DoInteractionTest(out IInteractable interactable)
+    private void PerformInteraction()
     {
-        interactable = null;
+        var interactables = GetRaycastInteractables();
 
-        Ray ray = new Ray(transform.position + _rayOffset, transform.forward);
+        interactables
+            .Where(interactable => interactable.CanInteract())
+            .ToList()
+            .ForEach(interactable => interactable.Interact(this));
+    }
 
-        if (Physics.Raycast(ray, out RaycastHit hitInfo, _castDistance))
+    private IEnumerable<IInteractable> GetRaycastInteractables()
+    {
+        Transform sourceTransform = Camera.main != null ? Camera.main.transform : transform;
+        Vector3 rayOrigin = sourceTransform.position;
+
+        if (Camera.main == null)
         {
-            Debug.Log("Hit: " + hitInfo.collider.name);
-            interactable = hitInfo.collider.GetComponent<IInteractable>();
-            if (interactable != null)
-            {
-                return true;
-            }
-            return false;
+            rayOrigin += _rayOffset;
         }
-        return false;
+
+        Ray ray = new Ray(rayOrigin, sourceTransform.forward);
+        Debug.DrawRay(ray.origin, ray.direction * _castDistance, Color.green, 2.0f);
+
+        RaycastHit[] hits = Physics.RaycastAll(ray, _castDistance, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Collide);
+
+        return hits
+            .OrderBy(hit => hit.distance)
+            .Where(hit => hit.collider.transform.root != transform.root)
+            .SelectMany(hit => GetInteractablesFromHit(hit))
+            .Distinct();
+    }
+
+    private IEnumerable<IInteractable> GetInteractablesFromHit(RaycastHit hit)
+    {
+        // First try to find interactables in the object's parent hierarchy (standard approach)
+        var parentInteractables = hit.collider.GetComponentsInParent<IInteractable>();
+        if (parentInteractables != null && parentInteractables.Length > 0)
+        {
+            return parentInteractables;
+        }
+
+        // Fallback: Check the entire root hierarchy (useful for complex prefabs like the Bus)
+        return hit.collider.transform.root.GetComponentsInChildren<IInteractable>();
     }
 }
