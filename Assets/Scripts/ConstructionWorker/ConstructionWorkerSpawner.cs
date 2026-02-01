@@ -17,15 +17,6 @@ public class ConstructionWorkerSpawner : MonoBehaviour
     void Start()
     {
         currentSpawnInterval = initialSpawnInterval;
-        
-        if (bus == null)
-        {
-            Debug.LogError("ConstructionWorkerSpawner: Bus reference is null! Please assign the bus in the Inspector.");
-        }
-        else
-        {
-            Debug.Log($"ConstructionWorkerSpawner: Bus reference set to {bus.name}");
-        }
     }
 
     void Update()
@@ -65,12 +56,7 @@ public class ConstructionWorkerSpawner : MonoBehaviour
         ConstructionWorker workerScript = worker.GetComponentInChildren<ConstructionWorker>();
         if (workerScript != null)
         {
-            Debug.Log($"Spawner: Calling SetBusTarget with bus: {bus.name}");
             workerScript.SetBusTarget(bus);
-        }
-        else
-        {
-            Debug.LogError("Spawner: Worker prefab does not have ConstructionWorker component in children!");
         }
     }
 

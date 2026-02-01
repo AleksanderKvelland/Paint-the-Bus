@@ -9,6 +9,7 @@ public class PlayerLook : MonoBehaviour
     [Header("References")]
     public Transform cameraRoot;          
     public Transform playerBody;
+    private Rigidbody rigidbody;
 
     [Header("Settings")]
     public float sensitivity = 1f;
@@ -23,6 +24,7 @@ public class PlayerLook : MonoBehaviour
         // Lock cursor to center
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        rigidbody = playerBody.GetComponent<Rigidbody>();
     }
     
     private void OnEnable()
@@ -40,7 +42,8 @@ public class PlayerLook : MonoBehaviour
         //body rotation (yaw)
         lookInput = lookAction.action.ReadValue<Vector2>();
         float yaw = lookInput.x * sensitivity;
-        playerBody.Rotate(0f, yaw, 0f);
+        Quaternion delta = Quaternion.Euler(0f, yaw, 0f);
+        rigidbody.MoveRotation(rigidbody.rotation * delta);
         
         //camera rotation (pitch)
         pitch -= lookInput.y * sensitivity;

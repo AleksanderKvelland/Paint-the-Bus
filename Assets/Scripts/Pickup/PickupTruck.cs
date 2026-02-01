@@ -10,25 +10,7 @@ public class PickupTruck : MonoBehaviour, IInteractable
     private InputAction exitAction;
     private PlayerMovement playerMovement;
     private PlayerLook playerLook;
-    private bool playerInsidePickup = false;
-
-    public void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            playerInsidePickup = true;
-            Debug.Log("Player entered the truck pickup area.");
-        }
-    }
-
-    public void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            playerInsidePickup = false;
-            Debug.Log("Player exited the truck pickup area.");
-        }
-    }
+    private bool playerInsidePickup = true;
 
     public bool CanInteract()
     {
