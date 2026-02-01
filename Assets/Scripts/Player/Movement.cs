@@ -1,5 +1,4 @@
 using System;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Splines;
@@ -20,7 +19,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Dash")]
     [SerializeField] private float dashSpeed = 10f;
-    [SerializeField] private GameObject camera;
+    [SerializeField] private GameObject cam;
 
     private Rigidbody rb;
     private Vector2 input;
@@ -112,9 +111,9 @@ public class PlayerMovement : MonoBehaviour
     public void OnDash()
     {
         Vector3 dashDirection = transform.forward;
-        if (camera)
+        if (cam)
         {
-            dashDirection = camera.transform.forward;
+            dashDirection = cam.transform.forward;
         }
 
         dashDirection.y = 0f;

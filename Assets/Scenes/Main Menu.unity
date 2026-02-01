@@ -1226,7 +1226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72b39fad8731dee4c9cf3dfd07be308f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StartGame
-  gameScene: Dana
+  gameScene: SimplePoly City - Low Poly Assets_Demo Scene
 --- !u!4 &1848019979
 Transform:
   m_ObjectHideFlags: 0
