@@ -11,14 +11,10 @@ public class DoorInteraction : MonoBehaviour, IInteractable
     [SerializeField]
     private Transform _leftDoor;
 
-    [SerializeField]
-    private Transform _rightDoor;
 
     private bool _isOpen = false;
     private Quaternion _leftStartRotation;
     private Quaternion _leftTargetRotation;
-    private Quaternion _rightStartRotation;
-    private Quaternion _rightTargetRotation;
     private float _rotationTime = 0f;
     private bool _isRotating = false;
 
@@ -27,19 +23,11 @@ public class DoorInteraction : MonoBehaviour, IInteractable
         // Find the door children if not assigned
         if (_leftDoor == null)
             _leftDoor = transform.Find("LeftDoors");
-        if (_rightDoor == null)
-            _rightDoor = transform.Find("RightDoors");
 
         if (_leftDoor != null)
         {
             _leftStartRotation = _leftDoor.rotation;
             _leftTargetRotation = _leftStartRotation;
-        }
-
-        if (_rightDoor != null)
-        {
-            _rightStartRotation = _rightDoor.rotation;
-            _rightTargetRotation = _rightStartRotation;
         }
     }
 
@@ -52,15 +40,10 @@ public class DoorInteraction : MonoBehaviour, IInteractable
             if (_leftDoor != null)
                 _leftDoor.rotation = Quaternion.Slerp(_leftStartRotation, _leftTargetRotation, _rotationTime);
 
-            if (_rightDoor != null)
-                _rightDoor.rotation = Quaternion.Slerp(_rightStartRotation, _rightTargetRotation, _rotationTime);
-
             if (_rotationTime >= 1f)
             {
                 if (_leftDoor != null)
                     _leftDoor.rotation = _leftTargetRotation;
-                if (_rightDoor != null)
-                    _rightDoor.rotation = _rightTargetRotation;
                 _isRotating = false;
             }
         }
@@ -79,6 +62,7 @@ public class DoorInteraction : MonoBehaviour, IInteractable
     /// </summary>
     public void Interact(Interactor interactor)
     {
+        Debug.Log("Attempting to interact with the door.");
         if (!CanInteract() || _isRotating)
             return;
             
@@ -88,23 +72,17 @@ public class DoorInteraction : MonoBehaviour, IInteractable
         // Store current rotations as start
         if (_leftDoor != null)
             _leftStartRotation = _leftDoor.rotation;
-        if (_rightDoor != null)
-            _rightStartRotation = _rightDoor.rotation;
         
         // Rotate left door -90 degrees, right door +90 degrees around Y axis
         if (_isOpen)
         {
             if (_leftDoor != null)
                 _leftTargetRotation = _leftStartRotation * Quaternion.Euler(0, -90f, 0);
-            if (_rightDoor != null)
-                _rightTargetRotation = _rightStartRotation * Quaternion.Euler(0, 90f, 0);
         }
         else
         {
             if (_leftDoor != null)
                 _leftTargetRotation = _leftStartRotation * Quaternion.Euler(0, 90f, 0);
-            if (_rightDoor != null)
-                _rightTargetRotation = _rightStartRotation * Quaternion.Euler(0, -90f, 0);
         }
 
         _rotationTime = 0f;

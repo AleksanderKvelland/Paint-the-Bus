@@ -9,7 +9,6 @@ public class TruckMovement : MonoBehaviour
     public float drivebySpeed = 3f;
     private SplineAnimate splineAnimate;
     private bool isDriveby;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
